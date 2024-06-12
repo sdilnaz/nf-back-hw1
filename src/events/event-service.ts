@@ -15,6 +15,25 @@ class EventService {
     async getEvents(): Promise<IEvent[]> {
       return await EventModel.find().exec(); 
     }
+    
+
+    
+  
+    async getEventsByCity(
+      location: string,
+      page: number,
+      limit: number,
+      sortBy: string,
+      sortDirection: string
+    ): Promise<IEvent[]> {
+      const skip = (page - 1) * limit;
+      const sortOptions: { [key: string]: 1 | -1 } = { [sortBy]: sortDirection === 'asc' ? 1 : -1 };
+      return await EventModel.find({ location })
+        .skip(skip)
+        .limit(limit)
+        .sort(sortOptions)
+        .exec();
+    }
 
     async createEvent(createEventDto: CreateEventDto): Promise<IEvent> {
       const { name, description, date, location ,duration} = createEventDto;
@@ -29,9 +48,12 @@ class EventService {
       await newEvent.save();
       return newEvent;
     }
+    
   
     
+    
   }
+  
   
   export default EventService;
   

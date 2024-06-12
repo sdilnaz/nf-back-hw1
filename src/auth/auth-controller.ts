@@ -13,7 +13,9 @@ class AuthController {
     try {
       const createUserDto: CreateUserDto = req.body;
       const user = await this.authService.registerUser(createUserDto);
-      res.status(201).json(user);
+      // res.status(201).json(user);
+      const { id, email, username, location } = user; // Destructure only necessary fields
+    res.status(201).json({ id, email, username, location });
     } catch (err) {
       res.status(500).json({ message: 'Error registering user' });
     }
